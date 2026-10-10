@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Maths Penalty Cup</title>
+<style>
+:root{--bg:#1a0b3d;--pn:#fff;--ink:#12263f;--mut:#c9bfe8;--yel:#ffd23f;--org:#ff6b35;--ln:#c5d0dd;--card:#2a1660;--cink:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--pn:#16283f;--ink:#eef3f9;--card:#1d1048}}
+:root[data-theme=dark]{--pn:#16283f;--ink:#eef3f9;--card:#1d1048}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{background:var(--bg) radial-gradient(circle at 50% -20%,#5b2bb8,#1a0b3d 60%);color:var(--cink);font:clamp(15px,2.3vh,20px)/1.3 "Trebuchet MS","Segoe UI",Verdana,sans-serif;overflow:hidden}
+#app{height:100%;display:flex;flex-direction:column}
+button{font:inherit;cursor:pointer;border:2px solid #fff;background:var(--pn);color:var(--ink);border-radius:12px;min-height:44px;padding:4px 14px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+button:hover{background:var(--yel);color:#12263f}
+button.pri{background:var(--yel);color:#12263f;box-shadow:0 4px 0 #0b1530}button.pri:hover{background:#fff}
+button:disabled{opacity:.4;cursor:default}
+:focus-visible{outline:4px solid #22d3ee;outline-offset:2px}
+.ic{flex:none;filter:drop-shadow(0 0 1.2px #12263f) drop-shadow(0 0 1.2px #12263f)}
+.hud{flex:none;background:#0b0620;color:#fff;display:flex;gap:12px;align-items:center;padding:6px 12px;flex-wrap:wrap}
+.hud b{font-size:1.2em;display:inline-flex;align-items:center;gap:6px}.sp{flex:1}.hud button{min-height:36px;background:transparent;color:#fff}.hud button:hover{background:var(--yel);color:#12263f}
+#tm{flex:none;height:8px;background:#ffffff26;display:none}#tm i{display:block;height:100%;width:100%;background:var(--yel)}
+main{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;padding:8px 10px;gap:8px}
+.ft{flex:none;text-align:center;font-size:12px;color:var(--mut);padding:3px 8px}
+.su{align-items:center;text-align:center}.su h1{font-size:clamp(28px,6vh,56px);margin:2px 0;color:var(--yel);letter-spacing:1px}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center}
+.gcs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:10px;width:min(1200px,100%);text-align:left}
+.gc{background:var(--card);border:3px solid var(--gc);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.gc input,.gc textarea,.opt select{font:inherit;border-radius:8px;border:2px solid #6d55b8;background:#0f0830;color:#fff;padding:6px;width:100%}
+.gc textarea{min-height:clamp(60px,12vh,120px);resize:vertical}.gc small{color:var(--mut)}
+.seg{display:flex;gap:4px}.seg button{flex:1;min-height:38px;padding:2px 4px;background:#0f0830;color:#fff;border-color:#6d55b8;font-size:.85em}
+.seg button:hover{background:#3b2a85;color:#fff;border-color:#ffd23f}.seg button.on{background:var(--gc);color:#0b1530;border-color:var(--gc)}
+.opt{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center}.opt select{width:auto}
+.cols{flex:1 0 400px;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:8px;min-height:0}
+@media(max-width:760px){.cols{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));flex:none}}
+.col{display:flex;flex-direction:column;gap:5px;background:var(--card);border:3px solid var(--gc);border-radius:14px;padding:6px;min-height:0;transition:box-shadow .3s}
+.col.act{box-shadow:0 0 0 4px var(--gc),0 0 28px var(--gc)}
+.gh{display:flex;align-items:center;gap:6px}.gh b{flex:1;font-size:1.1em;color:var(--gc);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lv{font-size:.7em;border:2px solid var(--gc);border-radius:10px;padding:0 6px}
+.sc{background:var(--gc);color:#0b1530;font-weight:900;font-size:1.3em;min-width:2em;text-align:center;border-radius:10px;padding:0 6px}
+.scene{flex:1 1 0;min-height:120px;position:relative;border-radius:10px;overflow:hidden}.scene svg{width:100%;height:100%;display:block}
+.pop{position:absolute;left:0;right:0;top:34%;text-align:center;font-weight:900;font-size:clamp(22px,5vh,48px);color:#fff;text-shadow:0 3px 0 #0b1530,0 0 14px var(--gc);opacity:0;pointer-events:none}
+.pop.show{opacity:1}
+.sh{text-align:center;font-weight:700;min-height:1.4em}.sh b{color:var(--gc)}
+.q{text-align:center;font-weight:900;font-size:clamp(20px,4.2vh,40px);padding:2px 4px;background:#0f0830;border-radius:10px}
+.os{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.os button{min-height:clamp(42px,8vh,68px);font-size:clamp(17px,3.4vh,30px);background:#0f0830;color:#fff;border-color:var(--gc)}
+.os button:hover:not(:disabled){background:var(--gc);color:#0b1530}
+.os button.lk{background:var(--gc);color:#0b1530;opacity:1}.os button.ok{background:#22c55e;color:#0b1530;border-color:#22c55e;opacity:1}.os button.bad{background:#ef4444;color:#fff;border-color:#ef4444;opacity:1}
+.pc{display:flex;gap:10px;align-items:flex-end;justify-content:center;flex-wrap:wrap;margin:10px 0}
+.pb2{width:clamp(110px,16vw,190px);border-radius:12px 12px 0 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;color:#0b1530;font-weight:900;padding:6px;background:var(--gc)}
+.pb2 big{font-size:2em}
+.stat{text-align:left;display:grid;grid-template-columns:auto auto;gap:2px 20px;margin:4px auto}
+.kp{animation:sway 1.4s infinite alternate ease-in-out}.st .kp{animation:none}.run .pb{animation:bob .16s infinite alternate}
+.cf{position:absolute;top:100%;pointer-events:none;z-index:5}
+@media(prefers-reduced-motion:no-preference){@keyframes sway{from{transform:translateX(-16px)}to{transform:translateX(16px)}}@keyframes bob{to{transform:translateY(-6px)}}.cf{animation:up 1.2s ease-out forwards}@keyframes up{to{transform:translateY(-60vh) rotate(300deg);opacity:0}}.pop.show{animation:pp .5s}@keyframes pp{from{transform:scale(.3)}60%{transform:scale(1.2)}}}
+.ov{position:fixed;inset:0;background:#0b0620ee;display:flex;align-items:center;justify-content:center;z-index:9;padding:16px;overflow:auto}.ovc{max-width:1000px;width:100%;text-align:center}.ovc h1{color:var(--yel);font-size:clamp(28px,6vh,56px);margin:4px 0}
+.rc{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:16px 0}.rch{background:var(--card);border:4px solid var(--gc);border-radius:16px;padding:10px 22px;min-width:clamp(150px,20vw,240px)}.rch small{display:block;color:var(--gc);font-weight:800;font-size:1.1em}.rch b{font-size:clamp(24px,5.5vh,48px);color:#fff}
+.lib{width:min(1100px,100%);background:var(--card);border:2px solid #6d55b8;border-radius:12px;padding:8px;text-align:left;display:flex;flex-direction:column;gap:6px;margin:6px 0}.lib input,.lib textarea{font:inherit;border-radius:8px;border:2px solid #6d55b8;background:#0f0830;color:#fff;padding:6px}.lib textarea{width:100%;min-height:50px}.lib summary{cursor:pointer;font-weight:800}.stt{color:var(--mut);font-size:.85em}
+.fl{cursor:pointer;border:2px solid #fff;background:var(--pn);color:var(--ink);border-radius:12px;min-height:44px;padding:4px 14px;font-weight:800;display:inline-flex;align-items:center}.fl:hover{background:var(--yel);color:#12263f}.fl:focus-within{outline:4px solid #22d3ee;outline-offset:2px}.sr{position:absolute;opacity:0;width:1px;height:1px}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b1a82"/><stop offset="1" stop-color="#14083a"/></linearGradient>
+<pattern id="net" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M0 0H10V10" fill="none" stroke="#fff" stroke-opacity=".35"/></pattern>
+<pattern id="crowd" width="16" height="14" patternUnits="userSpaceOnUse"><circle cx="4" cy="7" r="4" fill="#ff4fa3"/><circle cx="12" cy="6" r="4" fill="#22d3ee"/><circle cx="8" cy="12" r="3" fill="#a3e635"/></pattern></defs></svg>
+<div id="app"></div>
+<script>
+const $=s=>document.querySelector(s),R=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),Rn=a=>a[R(0,a.length-1)],sh=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]),sl=ms=>{const m=MID;return new Promise(r=>setTimeout(r,ms)).then(async()=>{while(S.paused)await new Promise(r=>setTimeout(r,100));if(m!=MID)await new Promise(()=>{})})};
+const COLS=['#ff6b35','#a855f7','#22d3ee','#a3e635','#ff4fa3'],NAMES=['Fire Falcons','Sky Strikers','Jungle Jaguars','Thunder Titans','Neon Ninjas'],LV=['Rookie','Striker','Pro','Legend'],DS=['Grade 1-2: small add and subtract, doubles, skip counting','Grade 3: tables, division facts, 3-digit add/subtract, perimeter','Grade 4: multiply and divide, fractions, rounding, area','Grade 5: decimals, unlike fractions, percentages, LCM'];
+let MID=0,CFG={n:2,g:[],timer:45,mode:'fair'},G=[],S={},AC;
+try{Object.assign(CFG,JSON.parse(localStorage.getItem('pk_cfg')||'{}'))}catch(e){}
+const sv=()=>{try{localStorage.setItem('pk_cfg',JSON.stringify(CFG))}catch(e){}};
+function beep(f,d=.12,t='sine'){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type=t;o.frequency.value=f;g.gain.value=.07;o.connect(g);g.connect(AC.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+d);o.stop(AC.currentTime+d)}catch(e){}}
+const FT='<div class="ft">© 2026 Maths Penalty Cup | Developed by AMSanjeev (Teach For India Fellow 2026–28)</div>';
+const IC={ball:'<circle cx="12" cy="12" r="10" fill="#fff" stroke="#0b1530" stroke-width="1.500"/><path d="M12 7.500l4 2.900-1.500 4.700h-5L8 10.400z" fill="#0b1530"/><path d="M12 7.500V2M16 10.400l5.500-1.700M14.500 15.100l3.500 4.500M9.500 15.100L6 19.600M8 10.400L2.500 8.700" stroke="#0b1530" stroke-width="1.300" fill="none"/>',
+trophy:'<path d="M7 3h10v6a5 5 0 0 1-10 0z" fill="#ffd23f"/><path d="M7 5H3c0 4 2 6 4 6M17 5h4c0 4-2 6-4 6" fill="none" stroke="#ffd23f" stroke-width="2"/><rect x="10.500" y="14" width="3" height="4" fill="#ffd23f"/><rect x="7" y="18" width="10" height="3" rx="1" fill="#ffd23f"/>',
+flame:'<path d="M12 2c1 4 5 6 5 11a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-4-1-6 1-10z" fill="#ff7a2f"/><path d="M12 22a3 3 0 0 1-3-3c0-2 2-3 3-5 1 2 3 3 3 5a3 3 0 0 1-3 3z" fill="#ffd23f"/>',
+star:'<path d="M12 2l3 6.500 7 .9-5.200 4.800 1.400 7L12 17.800 5.800 21.200l1.400-7L2 9.400l7-.9z" fill="#ffd23f" stroke="#b8860b"/>',
+check:'<circle cx="12" cy="12" r="10" fill="#4be08a"/><path d="M7 12.500l3.200 3.200L17 9" fill="none" stroke="#0b1530" stroke-width="2.800" stroke-linecap="round" stroke-linejoin="round"/>'};
+const I=(n,z=24,x='')=>`<svg class="ic" viewBox="0 0 24 24" width="${z}" height="${z}" ${x} aria-hidden="true" style="vertical-align:middle">${IC[n]}</svg>`;
+/* ---------- question generator ---------- */
+const nd=a=>[a+1,a-1,a+2,a-2,a+10,a-10,a+5,a-5].filter(x=>x>=0&&x!=a).map(String);
+const mk=(q,a,d)=>{a=String(a);const o=[a];sh([...new Set(d.map(String))]).forEach(x=>{if(o.length<4&&x!=a)o.push(x)});for(let k=1;o.length<4;k++)o.push(String(+a+k*3));return{q,a,o:sh(o)}};
+const FR=['1/2','2/3','3/4','5/6','1/3','2/5','5/8','3/8','1/4','4/5','7/10'];
+const GEN={1:[()=>{const a=R(2,12),b=R(2,9);return mk(`${a} + ${b} = ?`,a+b,nd(a+b))},
+()=>{const a=R(10,20),b=R(2,9);return mk(`${a} − ${b} = ?`,a-b,nd(a-b))},
+()=>{const a=R(3,15);return mk(`Double ${a} = ?`,2*a,nd(2*a).concat([a+2]))},
+()=>{const a=R(2,12)*2;return mk(`Half of ${a} = ?`,a/2,nd(a/2).concat([a-2]))},
+()=>{const s=Rn([2,5,10]);return mk(`${s}, ${2*s}, ${3*s}, ?`,4*s,nd(4*s).concat([4*s+s]))},
+()=>{const t=R(2,9),o=R(1,9);return mk(`${t} tens + ${o} ones = ?`,t*10+o,[t+o,o*10+t,t*10+o+10,t*10+o-1,t*10])}],
+2:[()=>{const a=R(2,10),b=R(2,10),p=a*b;return mk(`${a} × ${b} = ?`,p,[p+a,p-a,p+b,p-b,p+1,p-1])},
+()=>{const a=R(2,10),b=R(2,10);return mk(`${a*b} ÷ ${a} = ?`,b,nd(b))},
+()=>{const a=R(100,700),b=R(20,250);return mk(`${a} + ${b} = ?`,a+b,nd(a+b).concat([a+b+100,a+b-100]))},
+()=>{const a=R(300,900),b=R(20,250);return mk(`${a} − ${b} = ?`,a-b,nd(a-b).concat([a-b+100,a-b-100]))},
+()=>{const n=String(R(1000,9999)).replace(/0/g,'5'),i=R(0,3),d=+n[i],p=3-i,v=d*10**p;return mk(`Value of the digit ${d} in ${n}?`,v,[d*10**(p+1),p?d*10**(p-1):d*100,d,d*10**((p+2)%4)])},
+()=>{const l=R(4,15),w=R(2,l-1);return mk(`Perimeter of a rectangle ${l} cm by ${w} cm?`,2*(l+w),[l*w,l+w,2*l+w,2*(l+w)+2])}],
+3:[()=>{const a=R(12,49),b=R(3,9),p=a*b;return mk(`${a} × ${b} = ?`,p,[p+10,p-10,p+b,p-b,p+a])},
+()=>{const a=R(11,40),b=R(3,9);return mk(`${a*b} ÷ ${b} = ?`,a,nd(a))},
+()=>{const d=Rn([5,6,8,10,12]),a=R(1,d-3),b=R(1,d-1-a);return mk(`${a}/${d} + ${b}/${d} = ?`,`${a+b}/${d}`,[`${a+b}/${2*d}`,`${a+b+1}/${d}`,`${Math.abs(a-b)}/${d}`,`${a+b+2}/${d}`])},
+()=>{const n=R(101,999),a=Math.round(n/10)*10;return mk(`Round ${n} to the nearest 10`,a,[a+10,a-10,a+20,Math.round(n/100)*100])},
+()=>{const l=R(4,15),w=R(3,12);return mk(`Area of a rectangle ${l} cm by ${w} cm?`,l*w,[2*(l+w),l+w,l*w+l,l*w-w])},
+()=>{const a=R(4,12),b=R(3,9);return mk(`A box holds ${a} pencils. How many pencils in ${b} boxes?`,a*b,[a+b,a*b+a,a*b-b,a*b+b])}],
+4:[()=>{const a=R(12,25),b=R(11,19),p=a*b;return mk(`${a} × ${b} = ?`,p,[p+10,p-10,p+a,p-a,p+b,p-b])},
+()=>{const b=R(3,9),c=R(21,99);return mk(`${b*c} ÷ ${b} = ?`,c,[c+1,c-1,c+10,c-10,c+2])},
+()=>{const A=R(11,89),B=R(11,89),s=A+B,F=x=>(x/10).toFixed(1);return mk(`${F(A)} + ${F(B)} = ?`,F(s),[F(s+1),F(s-1),F(s+10),F(s-10)])},
+()=>{const t=Rn([['1/2','1/4','3/4'],['1/3','1/6','1/2'],['1/2','1/3','5/6'],['2/3','1/6','5/6'],['1/4','3/8','5/8'],['1/5','3/10','1/2']]);return mk(`${t[0]} + ${t[1]} = ?`,t[2],FR.filter(x=>x!=t[2]))},
+()=>{const a=R(2,9),b=R(2,9),c=R(2,9);return mk(`${a} + ${b} × ${c} = ?`,a+b*c,[(a+b)*c,a*b+c,a+b+c,a+b*c+b])},
+()=>{const p=Rn([10,20,25,50]),n=20*R(2,10),v=p*n/100;return mk(`${p}% of ${n} = ?`,v,nd(v).concat([p,n/p]))},
+()=>{const t=Rn([[2,3],[4,6],[3,5],[6,8],[4,10],[6,9]]),l=t[0]*t[1]/(function g(a,b){return b?g(b,a%b):a})(t[0],t[1]);return mk(`LCM of ${t[0]} and ${t[1]} = ?`,l,[t[0]*t[1],t[0]+t[1],l*2,l+t[0]])}]};
+const gen=lv=>Rn(GEN[lv])();
+/* ---------- setup ---------- */
+const gcd=(a,b)=>b?gcd(b,a%b):a,names=t=>(t||'').split(/[,;\n]+/).map(x=>x.trim()).filter(Boolean);
+function setup(){MID++;['#rdy','#pz'].forEach(q=>{const x=$(q);if(x)x.remove()});clearTimeout(S.tid);S={};const n=CFG.n;for(let i=0;i<5;i++)CFG.g[i]=CFG.g[i]||{name:NAMES[i],lv:2,txt:''};
+ $('#app').innerHTML=`<div class="hud"><b>${I('ball',24)} MATHS PENALTY CUP</b></div><main class="su"><h1>MATHS PENALTY CUP</h1><div class="lib" id="lib"></div><div style="font-size:1.15em">How many groups are playing?</div><div class="row">${[2,3,4,5].map(k=>`<button class="${k==n?'pri':''}" style="min-width:64px" onclick="CFG.n=${k};setup()">${k}</button>`).join('')}</div>
+ <div class="gcs">${CFG.g.slice(0,n).map((g,i)=>`<div class="gc" style="--gc:${COLS[i]}"><input aria-label="Group name" value="${g.name.replace(/"/g,'&quot;')}" oninput="CFG.g[${i}].name=this.value"><div class="seg">${LV.map((l,j)=>`<button class="${g.lv==j+1?'on':''}" title="${DS[j]}" onclick="CFG.g[${i}].lv=${j+1};setup()">${l}</button>`).join('')}</div><small>${DS[g.lv-1]}</small><textarea aria-label="Player names" placeholder="Paste student names, separated by commas" oninput="CFG.g[${i}].txt=this.value;upd()">${g.txt}</textarea><div id="cnt${i}" style="font-weight:800"></div></div>`).join('')}</div>
+ <div class="opt"><label>Answer timer <select onchange="CFG.timer=+this.value">${[[0,'Off'],[20,'20 s'],[30,'30 s'],[45,'45 s'],[60,'60 s']].map(x=>`<option value="${x[0]}" ${CFG.timer==x[0]?'selected':''}>${x[1]}</option>`).join('')}</select></label><span id="info"></span></div>
+ <button class="pri" id="go" style="font-size:1.4em;min-height:60px;padding:4px 40px" onclick="go()">${I('ball',28)} KICK OFF</button></main>${FT}`;upd();renderLib()}
+function upd(){const n=CFG.n,sz=CFG.g.slice(0,n).map(g=>names(g.txt).length);sz.forEach((c,i)=>$('#cnt'+i).textContent=c+(c==1?' player':' players'));
+ const ok=sz.every(x=>x>0),L=sz.reduce((a,b)=>a*b/gcd(a,b),1),M=Math.max(...sz);$('#go').disabled=!ok;
+ $('#info').innerHTML=ok?`Rounds: <button class="${CFG.mode=='fair'?'pri':''}" onclick="CFG.mode='fair';upd()">Fair (LCM): ${L}</button> <button class="${CFG.mode=='quick'?'pri':''}" onclick="CFG.mode='quick';upd()">Quick: ${M}</button>${L>30&&CFG.mode=='fair'?' <small>long game! try Quick</small>':''}`:'Add players to every group to start'}
+function go(){MID++;if(CFG.cls&&LIB[CFG.cls]){snapC(CFG.cls);saveLib()}sv();G=CFG.g.slice(0,CFG.n).map((g,i)=>({name:g.name||NAMES[i],lv:g.lv,pl:names(g.txt),c:COLS[i],sc:0,st:0,gl:{}}));
+ const sz=G.map(g=>g.pl.length);S={r:0,N:CFG.mode=='fair'?sz.reduce((a,b)=>a*b/gcd(a,b),1):Math.max(...sz)};
+ $('#app').innerHTML=`<div class="hud"><b>${I('ball',24)} MATHS PENALTY CUP</b><span id="rd"></span><span class="sp"></span><button id="sn" onclick="shoot()">Shoot now</button><button onclick="pauseM()">Pause / Menu</button></div><div id="tm"><i></i></div><main><div class="cols" style="--n:${G.length}">${G.map((g,i)=>col(g,i)).join('')}</div></main>${FT}`;round()}
+/* ---------- scene ---------- */
+const KEEP='<circle cy="-52" r="9" fill="#ffd9b0"/><rect x="-9" y="-14" width="7" height="14" fill="#1b2a5a"/><rect x="2" y="-14" width="7" height="14" fill="#1b2a5a"/><rect x="-11" y="-44" width="22" height="31" rx="6" fill="#ffd23f" stroke="#0b1530" stroke-width="2"/><path d="M-11 -40L-26 -54M11 -40L26 -54" stroke="#ffd23f" stroke-width="6" stroke-linecap="round"/><circle cx="-27" cy="-56" r="5.500" fill="#ff4fa3"/><circle cx="27" cy="-56" r="5.500" fill="#ff4fa3"/>';
+const PLAY='<circle cy="-46" r="8" fill="#ffd9b0"/><path d="M-4 -12V0M4 -12V0" stroke="#fff" stroke-width="6" stroke-linecap="round"/><rect x="-10" y="-38" width="20" height="27" rx="6" style="fill:var(--gc)" stroke="#0b1530" stroke-width="2"/><path d="M-10 -34L-18 -20M10 -34L18 -20" stroke="#ffd9b0" stroke-width="5" stroke-linecap="round"/>';
+const col=(g,i)=>`<div class="col" id="c${i}" style="--gc:${g.c}"><div class="gh"><b>${g.name.replace(/</g,'&lt;')}</b><span class="lv">${LV[g.lv-1]}</span><span id="f${i}"></span><span class="sc" id="s${i}">0</span></div>
+<div class="scene"><svg viewBox="0 0 300 250"><rect width="300" height="250" fill="url(#sky)"/><rect width="300" height="30" fill="url(#crowd)" opacity=".85"/><rect y="120" width="300" height="130" fill="#0c7a56"/><rect y="150" width="300" height="24" fill="#12966a"/><rect y="200" width="300" height="24" fill="#12966a"/>
+<g id="n${i}"><rect x="40" y="34" width="220" height="86" fill="url(#net)"/></g><path d="M40 120V34H260V120" fill="none" stroke="#fff" stroke-width="7" stroke-linejoin="round"/><path d="M12 120H288" stroke="#fff" stroke-width="3" opacity=".8"/><circle cx="150" cy="200" r="3" fill="#fff"/>
+<g id="k${i}"><g class="kp">${KEEP}</g></g><g id="p${i}"><g class="pb">${PLAY}</g></g><g id="b${i}">${I('ball',20,'x="-10" y="-10"')}</g></svg><div class="pop" id="pp${i}"></div></div>
+<div class="sh" id="h${i}"></div><div class="q" id="q${i}"></div><div class="os" id="o${i}"></div></div>`;
+const tf=(e,x,y,s=1,r=0)=>e.style.transform=`translate(${x}px,${y}px) rotate(${r}deg) scale(${s})`;
+function reset(i){const k=$('#k'+i),p=$('#p'+i),b=$('#b'+i);[k,p,b].forEach(e=>{e.style.transition='none';e.style.opacity=1});tf(k,150,118);tf(p,40,238);tf(b,150,198);k.classList.remove('st');p.classList.remove('run');$('#c'+i).classList.remove('act');$('#pp'+i).classList.remove('show')}
+/* ---------- round flow ---------- */
+function round(){if(S.r>=S.N)return end();S.ph='ready';$('#rd').textContent=`Round ${S.r+1} of ${S.N}`;$('#sn').disabled=true;
+ G.forEach((g,i)=>{g.q=gen(g.lv);g.ch=null;g.who=g.pl[S.r%g.pl.length];reset(i);$('#h'+i).innerHTML=`Shooter: <b>${g.who.replace(/</g,'&lt;')}</b>`;$('#q'+i).textContent=g.q.q;$('#o'+i).innerHTML=g.q.o.map((x,j)=>`<button onclick="pick(${i},${j})">${x}</button>`).join('');hd(i)});
+ clearTimeout(S.tid);$('#tm').style.display='none';rdy()}
+const esc=t=>t.replace(/</g,'&lt;');
+function rdy(){const e=document.createElement('div');e.className='ov';e.id='rdy';e.innerHTML=`<div class="ovc"><h1>Round ${S.r+1} of ${S.N}</h1><div style="font-size:1.3em">Shooters, please come to the front!</div><div class="rc">${G.map(g=>`<div class="rch" style="--gc:${g.c}"><small>${esc(g.name)}</small><b>${esc(g.who)}</b></div>`).join('')}</div><button class="pri" style="font-size:1.5em;min-height:64px;padding:6px 44px" onclick="begin()">${I('ball',30)} We are ready, PLAY!</button> <button onclick="pauseM()">Pause / Menu</button></div>`;document.body.appendChild(e);beep(700,.15,'triangle')}
+function begin(){const r=$('#rdy');if(r)r.remove();S.ph='ask';$('#sn').disabled=false;beep(900,.25,'square');clearTimeout(S.tid);const t=$('#tm');
+ if(CFG.timer){t.style.display='block';const b=t.firstChild;b.style.transition='none';b.style.width='100%';b.offsetWidth;b.style.transition=`width ${CFG.timer}s linear`;b.style.width='0';S.t0=Date.now();S.trem=CFG.timer;S.tid=setTimeout(shoot,CFG.timer*1000)}else t.style.display='none'}
+function hd(i){const g=G[i];$('#s'+i).textContent=g.sc;$('#f'+i).innerHTML=g.st>=3?I('flame',24):''}
+function pick(i,j){if(S.ph!='ask'||G[i].ch!=null)return;G[i].ch=j;beep(520,.08);[...$('#o'+i).children].forEach((b,k)=>{b.disabled=k!=j;if(k==j)b.classList.add('lk')});$('#h'+i).innerHTML='<b>Locked in!</b> Waiting for the others';if(G.every(g=>g.ch!=null)){S.ph='wait';setTimeout(()=>{if(S.ph=='wait'){S.ph='ask';shoot()}},700)}}
+async function shoot(){if(S.ph=='shoot')return;S.ph='shoot';clearTimeout(S.tid);$('#sn').disabled=true;$('#tm').style.display='none';
+ for(let i=0;i<G.length;i++){await kick(i);await sl(500)}
+ await sl(1000);S.r++;round()}
+function pop(i,t){const e=$('#pp'+i);e.textContent=t;e.classList.remove('show');e.offsetWidth;e.classList.add('show')}
+function conf(i){const s=$('#c'+i+' .scene');for(let n=0;n<12;n++){const e=document.createElement('i');e.className='cf';e.innerHTML=I(n%2?'star':'ball',26);e.style.cssText=`left:${R(5,90)}%;animation-delay:${n*40}ms`;s.appendChild(e);setTimeout(()=>e.remove(),1600)}}
+async function kick(i){const g=G[i],c=$('#c'+i),p=$('#p'+i),b=$('#b'+i),k=$('#k'+i),ok=g.ch!=null&&g.q.o[g.ch]==g.q.a,s=Rn([-1,1]),out=ok?'goal':g.ch==null?'wide':Rn(['save','save','post','wide']);
+ c.classList.add('act');[...$('#o'+i).children].forEach((x,j)=>{x.disabled=true;x.classList.remove('lk');if(x.textContent==g.q.a)x.classList.add('ok');else if(j==g.ch)x.classList.add('bad')});
+ $('#h'+i).innerHTML=`${g.ch==null?'No answer! ':''}Answer: <b>${g.q.a}</b>`;
+ p.style.transition='transform .8s linear';p.classList.add('run');tf(p,118,214);await sl(800);p.classList.remove('run');p.style.transition='transform .15s';tf(p,126,212,1,-16);beep(240,.08,'square');
+ b.style.transition='transform .55s ease-out,opacity .3s';k.style.transition='transform .5s ease-out';k.classList.add('st');
+ if(out=='goal'){tf(k,150-s*50,118,1,-s*65);tf(b,150+s*R(55,75),R(55,95),.7,540);await sl(560);$('#n'+i).animate([{transform:'scale(1)'},{transform:'scale(1.06)'},{transform:'scale(1)'}],{duration:500});
+  g.st++;const pt=g.st>=3?2:1;g.sc+=pt;g.gl[g.who]=(g.gl[g.who]||0)+1;pop(i,pt==2?'GOAL! x2':'GOAL!');conf(i);beep(660,.15);setTimeout(()=>beep(880,.25),120);setTimeout(()=>beep(1100,.3),260)}
+ else{g.st=0;if(out=='save'){tf(k,150+s*45,112,1,s*65);tf(b,150+s*50,88,.8,200);await sl(560);b.style.transition='transform .4s ease-out';tf(b,150+s*85,160,.9,500);pop(i,'SAVED!');beep(150,.3,'sawtooth')}
+  else if(out=='post'){tf(b,150+s*110,72,.7,300);await sl(560);b.style.transition='transform .4s ease-out';tf(b,150+s*60,165,.9,600);pop(i,'HIT THE POST!');beep(900,.25,'square')}
+  else{tf(b,150+s*165,22,.5,500);b.style.opacity=0;await sl(560);pop(i,g.ch==null?'NO ANSWER!':'WIDE!');beep(200,.3,'sawtooth')}}
+ hd(i);await sl(1100)}
+/* ---------- end ---------- */
+function end(){const rk=[...G].sort((a,b)=>b.sc-a.sc),top=rk[0].sc,win=rk.filter(g=>g.sc==top),sc=[];G.forEach(g=>Object.keys(g.gl).forEach(n=>sc.push([n,g.gl[n],g.c])));sc.sort((a,b)=>b[1]-a[1]);
+ const mx=Math.max(1,top);$('#app').innerHTML=`<div class="hud"><b>${I('ball',24)} MATHS PENALTY CUP</b></div><main class="su"><div>${I('trophy',80)}</div><h1>${win.length>1?'It is a draw!':win[0].name.replace(/</g,'&lt;')+' win the cup!'}</h1>
+ <div class="pc">${rk.map(g=>`<div class="pb2" style="--gc:${g.c};height:${60+g.sc/mx*150}px"><big>${g.sc}</big>${g.name.replace(/</g,'&lt;')}</div>`).join('')}</div>
+ ${sc.length?`<div><b>${I('star',22)} Golden Boot</b></div><div class="stat">${sc.slice(0,5).map(x=>`<span style="color:${x[2]};font-weight:800">${x[0].replace(/</g,'&lt;')}</span><span>${x[1]} ${x[1]>1?'goals':'goal'}</span>`).join('')}</div>`:''}
+ <div class="row"><button class="pri" onclick="go()">Rematch (same teams)</button><button onclick="setup()">New teams</button></div></main>${FT}`;beep(660,.2);setTimeout(()=>beep(880,.2),200);setTimeout(()=>beep(1320,.4),400)}
+let LIB={},CL=null,KS=[],ST='Saved on this device.';
+try{LIB=JSON.parse(localStorage.getItem('pk_lib')||'{}')}catch(e){}
+function snapC(k){LIB[k]={n:CFG.n,g:CFG.g.slice(0,CFG.n).map(x=>({name:x.name,lv:x.lv,txt:x.txt})),timer:CFG.timer,mode:CFG.mode}}
+function saveLib(){try{localStorage.setItem('pk_lib',JSON.stringify(LIB))}catch(e){}pushCloud()}
+function setST(t){ST=t;const e=$('#stt');if(e)e.textContent=t}
+function pushCloud(){fbPush();if(CL)CL.set({lib:JSON.stringify(LIB)}).then(()=>setST('Synced to your Claude account')).catch(()=>setST('Cloud save failed. Data is still on this device.'))}
+async function initCloud(){try{if(!window.claude)return;const db=await claude.use('db'),us=await claude.use('user');if(!db||!us)return;const id=await us.id();if(!id)return;CL=db.doc('data/users/'+id+'/classes');const r=await CL.get();if(r.exists)Object.assign(LIB,JSON.parse(r.data().lib||'{}'));try{localStorage.setItem('pk_lib',JSON.stringify(LIB))}catch(e){}setST('Synced to your Claude account');renderLib();if(Object.keys(LIB).length)pushCloud()}catch(e){}}
+function renderLib(){const e=$('#lib');if(!e)return;KS=Object.keys(LIB);const code=KS.length?btoa(unescape(encodeURIComponent(JSON.stringify(LIB)))):'';
+ e.innerHTML=`<div class="row" style="justify-content:flex-start"><b>My classes</b>${KS.map((k,i)=>`<span class="row" style="gap:2px"><button onclick="loadC(${i})">${esc(k)}</button><button aria-label="Delete class" onclick="delC(${i})" style="min-width:36px;padding:2px 8px">x</button></span>`).join('')||'<small>none saved yet</small>'}</div>
+ <div class="row" style="justify-content:flex-start"><input id="cn" aria-label="Class name" placeholder="Class name, e.g. 5A" value="${esc(CFG.cls||'').replace(/"/g,'&quot;')}" oninput="CFG.cls=this.value"><button class="pri" onclick="saveC()">Save this class</button><span class="stt" id="stt">${ST}</span></div>
+ <details><summary>Use on another device</summary>${fbOn()?`<div class="row" style="justify-content:flex-start">${CODE?`<b>Your class code: ${fmt(CODE)}</b>`:`<button class="pri" onclick="mkCode()">Create my class code</button>`}<input id="cd" aria-label="Class code" placeholder="Enter a class code" style="width:14ch"><button onclick="useCode()">Load code</button></div>`:'<small>Class codes are switched off. They need the Firebase details added to the file.</small>'}<div class="row" style="justify-content:flex-start"><button onclick="dlB()">Download backup file</button><label class="fl">Load backup file<input type="file" accept=".json,application/json" class="sr" onchange="upB(this)"></label></div><textarea id="bk" readonly placeholder="Save a class first">${code}</textarea><div class="row"><button onclick="copyB()">Copy backup text</button></div><textarea id="rs" placeholder="Or paste backup text here"></textarea><div class="row"><button onclick="restoreB()">Restore from text</button></div></details>`}
+function saveC(){const k=(CFG.cls||'').trim();if(!k)return setST('Type a class name first, then press Save.');CFG.cls=k;snapC(k);saveLib();sv();renderLib();setST(CL?'Saved. Syncing to your Claude account...':'Saved on this device.')}
+function loadC(i){const c=LIB[KS[i]];CFG.n=c.n;CFG.g=c.g.map(x=>({...x}));CFG.timer=c.timer;CFG.mode=c.mode;CFG.cls=KS[i];sv();setup()}
+function delC(i){if(S.dl!==i){S.dl=i;return setST('Tap x again to delete "'+KS[i]+'"')}delete LIB[KS[i]];S.dl=null;saveLib();renderLib()}
+function copyB(){const t=$('#bk');t.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}setST(ok?'Backup code copied.':'Press Ctrl+C to copy the selected code.')}
+function restoreB(){try{Object.assign(LIB,JSON.parse(decodeURIComponent(escape(atob($('#rs').value.trim())))));saveLib();renderLib();setST('Classes restored.')}catch(e){setST('That code did not work. Copy it again in full.')}}
+/* ---------- pause ---------- */
+const rmP=()=>{const e=$('#pz');if(e)e.remove()};
+function pauseM(){if(S.paused)return;S.paused=true;
+ if(S.ph=='ask'&&CFG.timer){S.trem=Math.max(0,S.trem-(Date.now()-S.t0)/1000);clearTimeout(S.tid);const b=$('#tm').firstChild;b.style.width=getComputedStyle(b).width;b.style.transition='none'}
+ const e=document.createElement('div');e.className='ov';e.id='pz';e.style.zIndex=10;e.innerHTML=`<div class="ovc"><h1>Paused</h1><div class="row"><button class="pri" onclick="resume()">Resume</button><button onclick="rmP();go()">Restart match</button><button onclick="rmP();setup()">Change teams</button></div></div>`;document.body.appendChild(e)}
+function resume(){rmP();S.paused=false;if(S.ph=='ask'&&CFG.timer){S.t0=Date.now();const b=$('#tm').firstChild;b.offsetWidth;b.style.transition=`width ${S.trem}s linear`;b.style.width='0';S.tid=setTimeout(shoot,S.trem*1000)}}
+/* ---------- class code + file backup (works on GitHub Pages) ---------- */
+/* DEVELOPER: to turn on class codes, paste your Firebase project id and web API key here */
+const FB={project:'maths-penalty-cup',key:'AIzaSyAMsz-GB8WmGNUYjod6fquQJMYBQPJeOGs'};
+const fbOn=()=>FB.project&&FB.key,fmt=c=>c.slice(0,4)+'-'+c.slice(4),fbUrl=c=>`https://firestore.googleapis.com/v1/projects/${FB.project}/databases/(default)/documents/classes/${c}?key=${FB.key}`;
+let CODE='';try{CODE=localStorage.getItem('pk_code')||''}catch(e){}
+async function fbPush(){if(!fbOn()||!CODE)return;try{const r=await fetch(fbUrl(CODE),{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({fields:{lib:{stringValue:JSON.stringify(LIB)},t:{integerValue:String(Date.now())}}})});if(!r.ok)throw 0;setST('Synced. Your class code: '+fmt(CODE))}catch(e){setST('Cloud sync failed. Your data is still on this device.')}}
+async function mkCode(){const al='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',a=new Uint8Array(8);crypto.getRandomValues(a);CODE=[...a].map(x=>al[x%32]).join('');try{localStorage.setItem('pk_code',CODE)}catch(e){}await fbPush();renderLib()}
+async function useCode(){const c=($('#cd').value||'').toUpperCase().replace(/[^A-Z0-9]/g,'');if(c.length!=8)return setST('A class code has 8 letters and numbers.');try{const r=await fetch(fbUrl(c));if(!r.ok)throw 0;const j=await r.json();Object.assign(LIB,JSON.parse(j.fields.lib.stringValue));CODE=c;try{localStorage.setItem('pk_code',c)}catch(e){}saveLib();renderLib();setST('Classes loaded. Your class code: '+fmt(c))}catch(e){setST('Code not found. Check it and try again.')}}
+function dlB(){const b=new Blob([JSON.stringify(LIB)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='penalty-cup-classes.json';document.body.appendChild(a);a.click();a.remove();setST('Backup file downloaded.')}
+function upB(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{Object.assign(LIB,JSON.parse(r.result));saveLib();renderLib();setST('Classes restored from file.')}catch(e){setST('That file did not work.')}};r.readAsText(f)}
+setup();initCloud();
+</script></body></html>
